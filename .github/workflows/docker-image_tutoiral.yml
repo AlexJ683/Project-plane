@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main/backend" ]
+  pull_request:
+    branches: [ "main/backend" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Login Dockerhub
+      env: 
+        docker_username: ${{secrets.docker_username}}
+        docker_password: ${{secrets.docker_password}} 
+      run: docker login -u $docker_username -pdocker_password
+    - name: Build the Docker image
+      run: docker build -t project_planes_backend .\backend
+    - name: push to dockerhub
+      run: docker push project_plane_ backend:latest
